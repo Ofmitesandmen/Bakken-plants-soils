@@ -432,7 +432,11 @@ wet<-nemdata$WetSoil
 SM<-(nemdata$WetSoil-nemdata$DrySoil)/nemdata$DrySoil
 SMtrans<-(SM[1:45]+SM[46:90])/2
 
+#Code below standardizes nematode abundances to # individuals per kg dry soil
 bf.all<-1000*((nemdata$Bacterivorous/prop)/(extract*(dry/wet)))
+#We originally had each sampling transect subdivided by two to provide a bit finer resolution to the landscape-scale
+#comparisons, but scrapped this for single data points per transect. This code averages across both half-transect samples
+#to create that single value.
 bf<-(bf.all[1:45]+bf.all[46:90])/2
 
 ff.all<-1000*((nemdata$Fungivorous/prop)/(extract*(dry/wet)))
@@ -450,14 +454,14 @@ pr<-(pr.all[1:45]+pr.all[46:90])/2
 tot.all<-1000*((nemdata$Total/prop)/(extract*(dry/wet)))
 tot<-(tot.all[1:45]+tot.all[46:90])/2
 
-bf<-bf[-(7:9)]
+bf<-bf[-(7:9)]#deleting data from the 8221 site we discarded upon realizing it didn't fit our site selection requirements
 ff<-ff[-(7:9)]
 pp<-pp[-(7:9)]
 om<-om[-(7:9)]
 pr<-pr[-(7:9)]
 tot<-tot[-(7:9)]
 
-omnicarn<-om+pr
+omnicarn<-om+pr#Creates a new, unified predatory and omnivorous feeding guild
 
 #Testing nematode feeding guilds against transect types#################
 bf.test<-lmer(bf~trans+(1|site))
